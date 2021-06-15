@@ -11,7 +11,7 @@ import Managemasterdata from './pages/managemasterdata'
 import Masterdataauthor from './pages/masterdataauthor'
 import Addnewauthor from './pages/addnewauthor'
 import Editauthordata from './pages/editauthordata'
-import Masterrdataadvisor from './pages/masterdataadvisor'
+import Masterdataadvisor from './pages/masterdataadvisor'
 import Addnewadvisor from './pages/addnewadvisor'
 import Editadvisordata from './pages/editadvisordata'
 import Masterdatafield from './pages/masterdatafield'
@@ -37,9 +37,26 @@ class App extends Component {
       <BrowserRouter>
         <Route path="/homepage" component={Homepage} />
         <Route path="/login" component={Login} />
-        <Route path="/edituser" component={Edituser} />
+        <Route path="/managemasterdata" component={Managemasterdata} />
+        <Route path="/manageuser" component={Manageuser} />
         <Route path="/createnewuser" component={Createnewuser} />
+        <Route path="/edituser" component={Edituser} />
+        <Route path="/masterdataauthor" component={Masterdataauthor} />
         <Route path="/addnewauthor" component={Addnewauthor} />
+        <Route path="/editauthordata" component={Editauthordata} />
+        <Route path="/masterdataadvisor" component={Masterdataadvisor} />
+        <Route path="/addnewadvisor" component={Addnewadvisor} />
+        <Route path="/editadvisordata" component={Editadvisordata} />
+        <Route path="/masterdatafield" component={Masterdatafield} />
+        <Route path="/addnewfield" component={Addnewfield} />
+        <Route path="/editfielddata" component={Editfielddata} />
+        <Route path="/masterdatatopic" component={Masterdatatopic} />
+        <Route path="/addnewtopic" component={Addnewtopic} />
+        <Route path="/edittopic" component={Edittopic} />
+        <Route path="/masterdatascales" component={Masterdatascales} />
+        <Route path="/addnewscales" component={Addnewscales} />
+        <Route path="/editscales" component={Editscales} />
+        <Route path="/masterdatacompetition" component={Masterdatacompetition} />
         <Route path="/addnewcompetition" component={Addnewcompetition} />
         <Route path="/editcompetition" component={Editcompetition} />
         <Route path="/managescientificpaper" component={Managescientificpaper} />

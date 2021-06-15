@@ -4,6 +4,7 @@ import './edituser.css'
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { onLogoutUser } from '../redux/action'
+import { NavLink } from 'react-router-dom'
 
 class Edituser extends Component {
     constructor(props) {
@@ -28,23 +29,23 @@ class Edituser extends Component {
     * jadi didmount akan berjalan
     */
     componentDidMount() {
-        if (this.props.match && this.props.match.params.username) {
-            axios.get('http://localhost:6773/findUser/' + this.props.match.params.username)
+        if (this.props.match && this.props.match.params.id) {
+            axios.get('http://localhost:6773/findUser/' + this.props.match.params.id)
                 .then(res => {
                     this.setState({
-                        inputUserid: res.data.id,
-                        inputUsername: res.data.username,
-                        inputPassword: res.data.password,
-                        role: res.data.role
+                        inputUserid: res.data.data.id,
+                        inputUsername: res.data.data.username,
+                        inputPassword: res.data.data.password,
+                        role: res.data.data.role
                     }).catch(err => {
                         console.log(err);
                     })
                 })
             axios.get('http://localhost:6773/users_data')
                 .then(res => {
-                    if (res.data.length > 0) {
+                    if (res.data.data.length > 0) {
                         this.setState({
-                            users: res.data.map(user => user.username)
+                            users: res.data.data.map(user => user.username)
                         })
                     }
                 }).catch((error) => {
@@ -86,107 +87,187 @@ class Edituser extends Component {
         }
         console.log(users_data)
         axios.put('http://localhost:6773/users/update_user/' + this.props.match.params.id, users_data)
-            .then(res => console.log(res.data));
+            .then(res => console.log(res.data.data));
     }
 
 
     render() {
-        if (this.props.user_role === 'admin') {
-            return (
-                <div>
-                    <nav className="navbar navbar-light bg-light" id="nav1">
-                        <div id="logo">
-                            <img alt="Logo" className="gambar" />
-                            <span className="navbar-brand mb-0 h1">Repository Youth Science Club in Senior High School X</span>
-                        </div>
-                    </nav>
-                    <nav className="navbar navbar-expand-lg navbar-light" id="nav2">
-                        <div className="container-fluid">
-                            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                                <div className="navbar-nav">
-                                    <a className="nav-link active mx-3" href="#">Home</a>
-                                    <a className="nav-link active mx-3" href="#">Manage User</a>
-                                    <a className="nav-link active mx-3" href="#">Manage Master Data</a>
-                                    <a className="nav-link active mx-3" href="#">Manage Scienttific Paper</a>
-                                    <a className="nav-link active mx-3" href="#">Browse Collection</a>
-                                    <a className="nav-link active mx-3" href="#">Report</a>
+        // if (this.props.user_role === 'admin') {
+        //     return (
+        //         <div>
+        //             <nav className="navbar navbar-light bg-light" id="nav1">
+        //                 <div id="logo">
+        //                     <img alt="Logo" className="gambar" />
+        //                     <span className="navbar-brand mb-0 h1">Repository Youth Science Club in Senior High School X</span>
+        //                 </div>
+        //             </nav>
+        //             <nav className="navbar navbar-expand-lg navbar-light" id="nav2">
+        //                 <div className="container-fluid">
+        //                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+        //                         <div className="navbar-nav">
+        //                             <a className="nav-link active mx-3" href="#">Home</a>
+        //                             <a className="nav-link active mx-3" href="#">Manage User</a>
+        //                             <a className="nav-link active mx-3" href="#">Manage Master Data</a>
+        //                             <a className="nav-link active mx-3" href="#">Manage Scienttific Paper</a>
+        //                             <a className="nav-link active mx-3" href="#">Browse Collection</a>
+        //                             <a className="nav-link active mx-3" href="#">Report</a>
 
-                                </div>
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //             </nav>
+
+        //             <nav className="navbar navbar-expand-lg navbar-light bg-light" id="nav3">
+        //                 <div className="hello">
+        //                     <h6>Hello, Admin</h6>
+        //                     <button onClick={this.props.onLogoutUser} className="btn btn-dark" id="btn-logout">Log Out</button>
+        //                 </div>
+        //             </nav>
+
+        //             <div className="mt-5">
+        //                 <h4 className="manageuser">Manage User</h4>
+        //             </div>
+
+        //             <div className="container card" id="form">
+        //                 <Form className="form-create container" onSubmit={this.onSubmit}>
+        //                     <h3 className="headline-login">Edit User</h3>
+        //                     <FormGroup row>
+        //                         <Label for="exampleUserid" className="col">User ID</Label>
+        //                         <Col sm={10}>
+        //                             <Input type="email" name="email" id="example" placeholder="Cannot change" value={this.onChangeUserID} />
+        //                         </Col>
+        //                     </FormGroup>
+        //                     <FormGroup row>
+        //                         <Label for="exampleEmail" className="col">Username</Label>
+        //                         <Col sm={10}>
+        //                             <Input type="email" name="email" id="example" placeholder="input username" value={this.state.inputUserid} onChange={this.onChangeUsername} />
+        //                         </Col>
+        //                     </FormGroup>
+        //                     <FormGroup row>
+        //                         <Label for="examplePassword" className="col">Password</Label>
+        //                         <Col sm={10}>
+        //                             <Input type="password" name="password" id="example" placeholder="input password" value={this.state.inputUsername} onChange={this.onChangePassword} />
+        //                         </Col>
+        //                     </FormGroup>
+        //                     <FormGroup row>
+        //                         <Label for="example" className="col">Role</Label>
+        //                         <Col sm={10}>
+        //                             <select className="form-select"
+        //                                 value={this.state.role}
+        //                                 onChange={this.onChangeRole} >
+        //                                 {
+        //                                     this.state.role.map(roles => {
+        //                                         return <option key={roles} value={roles}>{roles}</option>
+        //                                     })
+        //                                 }
+        //                                 {/* <option selected>Select</option> */}
+        //                             </select>
+        //                         </Col>
+        //                     </FormGroup>
+        //                     <div className="button-create my-5">
+        //                         <button type="submit" className="btn btn-dark mx-3" id="btn-save">Save</button>
+        //                         <button type="reset" className="btn btn-dark mx-3" id="btn-cancel">Cancel</button>
+        //                     </div>
+        //                 </Form>
+        //             </div>
+        //         </div>
+        //     )
+        // } else {
+        //     return (
+        //         <h1 className="text-center mt-5">
+        //             Halaman tidak dapat diakses
+        //         </h1>
+        //     )
+        // }
+        return (
+            <div>
+                <nav className="navbar navbar-light bg-light" id="nav1">
+                    <div id="logo">
+                        <img alt="Logo" className="gambar" />
+                        <span className="navbar-brand mb-0 h1">Repository Youth Science Club in Senior High School X</span>
+                    </div>
+                </nav>
+                <nav className="navbar navbar-expand-lg navbar-light" id="nav2">
+                    <div className="container-fluid">
+                        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                            <div className="navbar-nav">
+                                <NavLink className="nav-link active mx-3" to="/homepage">Home</NavLink>
+                                <NavLink className="nav-link active mx-3" to="/manageuser">Manage User</NavLink>
+                                <NavLink className="nav-link active mx-3" to="/managemasterdata">Manage Master Data</NavLink>
+                                <NavLink className="nav-link active mx-3" to="/managescientificpaper">Manage Scienttific Paper</NavLink>
+                                <NavLink className="nav-link active mx-3" to="/browsecollection">Browse Collection</NavLink>
+                                <NavLink className="nav-link active mx-3" to="/report">Report</NavLink>
+
                             </div>
                         </div>
-                    </nav>
-
-                    <nav className="navbar navbar-expand-lg navbar-light bg-light" id="nav3">
-                        <div className="hello-admin">
-                            <h6>Hello, Admin</h6>
-                            <button onClick={this.props.onLogoutUser} className="btn btn-dark" id="btn-logout">Log Out</button>
-                        </div>
-                    </nav>
-
-                    <div className="mt-5">
-                        <h4 className="manageuser">Manage User</h4>
                     </div>
+                </nav>
 
-                    <div className="container card" id="form">
-                        <Form className="form-create container" onSubmit={this.onSubmit}>
-                            <h3 className="headline-login">Edit User</h3>
-                            <FormGroup row>
-                                <Label for="exampleUserid" className="col">User ID</Label>
-                                <Col sm={10}>
-                                    <Input type="email" name="email" id="example" placeholder="Cannot change" value={this.onChangeUserID} />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="exampleEmail" className="col">Username</Label>
-                                <Col sm={10}>
-                                    <Input type="email" name="email" id="example" placeholder="input username" value={this.state.inputUserid} onChange={this.onChangeUsername} />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="examplePassword" className="col">Password</Label>
-                                <Col sm={10}>
-                                    <Input type="password" name="password" id="example" placeholder="input password" value={this.state.inputUsername} onChange={this.onChangePassword} />
-                                </Col>
-                            </FormGroup>
-                            <FormGroup row>
-                                <Label for="example" className="col">Role</Label>
-                                <Col sm={10}>
-                                    <select className="form-select"
-                                        value={this.state.role}
-                                        onChange={this.onChangeRole} >
-                                        {
-                                            this.state.role.map(roles => {
-                                                return <option key={roles} value={roles}>{roles}</option>
-                                            })
-                                        }
-                                        {/* <option selected>Select</option> */}
-                                    </select>
-                                </Col>
-                            </FormGroup>
-                            <div className="button-create my-5">
-                                <button type="submit" className="btn btn-dark mx-3" id="btn-save">Save</button>
-                                <button type="reset" className="btn btn-dark mx-3" id="btn-cancel">Cancel</button>
-                            </div>
-                        </Form>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light" id="nav3">
+                    <div className="hello">
+                        <h6>Hello, Admin</h6>
+                        <button onClick={this.props.onLogoutUser} className="btn btn-dark" id="btn-logout">Log Out</button>
                     </div>
+                </nav>
+
+                <div className="mt-5">
+                    <h4 className="manageuser">Manage User</h4>
                 </div>
-            )
-        } else {
-            return (
-                <h1 className="text-center mt-5">
-                    Halaman tidak dapat diakses
-                </h1>
-            )
-        }
+
+                <div className="container card" id="form">
+                    <Form className="form-create container" onSubmit={this.onSubmit}>
+                        <h3 className="headline-login">Edit User</h3>
+                        <FormGroup row>
+                            <Label className="col">User ID</Label>
+                            <Col sm={10}>
+                                <Input id="example" placeholder="Cannot change" value={this.onChangeUserID} />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label className="col">Username</Label>
+                            <Col sm={10}>
+                                <Input id="example" placeholder="input username" value={this.state.inputUserid} onChange={this.onChangeUsername} />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label className="col">Password</Label>
+                            <Col sm={10}>
+                                <Input type="password" name="password" id="example" placeholder="input password" value={this.state.inputUsername} onChange={this.onChangePassword} />
+                            </Col>
+                        </FormGroup>
+                        <FormGroup row>
+                            <Label className="col">Role</Label>
+                            <Col sm={10}>
+                                <select className="form-select"
+                                    value={this.state.role}
+                                    onChange={this.onChangeRole} >
+                                    {
+                                        this.state.role.map(roles => {
+                                            return <option key={roles} value={roles}>{roles}</option>
+                                        })
+                                    }
+                                    {/* <option selected>Select</option> */}
+                                </select>
+                            </Col>
+                        </FormGroup>
+                        <div className="button-create my-5">
+                            <button type="submit" className="btn btn-dark mx-3" id="btn-save">Save</button>
+                            <button type="reset" className="btn btn-dark mx-3" id="btn-cancel">Cancel</button>
+                        </div>
+                    </Form>
+                </div>
+            </div>
+        )
     }
 }
 
 
 
-const mapStateToProps = state => {
-    return {
-        user_role: state.auth.role,
-    }
-}
+// const mapStateToProps = state => {
+//     return {
+//         user_role: state.auth.role,
+//     }
+// }
 
-export default connect(mapStateToProps, { onLogoutUser })(Edituser)
+// export default connect(mapStateToProps, { onLogoutUser })(Edituser)
+export default Edituser
